@@ -1,20 +1,26 @@
 package main
 
 import (
+	"github.com/joho/godotenv"
 	"log"
+	"os"
 
 	messagebird "github.com/messagebird/go-rest-api"
 	"github.com/messagebird/go-rest-api/sms"
 )
 
-var sender = "+61437200015"
 var recipients = []string{"+61437200015"}
 
 func main() {
-	client := messagebird.New("8uF0snGf07eB4cj6ZnbjI6Mzw")
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	client := messagebird.New(os.Getenv("MESSAGEBIRD_KEY"))
 	msg, err := sms.Create(
 		client,
-		sender,
+		os.Getenv("SMS_SENDER"),
 		recipients,
 		"Hello World, I am a text message and I was hatched by Go code!",
 		nil,
